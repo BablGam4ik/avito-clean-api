@@ -1,22 +1,23 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import List, Optional
 
 app = FastAPI()
 
-# РАЗРЕШАЕМ ЗАПРОСЫ С ЛЮБЫХ САЙТОВ (включая Beget)
+# НАСТРОЙКА CORS - РАЗРЕШАЕМ ВСЕ
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # * означает "все сайты"
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # разрешаем все методы (GET, POST и т.д.)
-    allow_headers=["*"],  # разрешаем все заголовки
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 class SearchRequest(BaseModel):
     city: str
+    max_price: Optional[int] = None
 
-# ДАННЫЕ ДЛЯ ГОРОДОВ
 APARTMENTS = {
     "москва": [
         {"id": 1, "title": "Москва - Патриаршие", "price": 8900, "address": "Москва, Патриаршая, 12"},
@@ -35,8 +36,16 @@ APARTMENTS = {
 async def health():
     return {"status": "ok"}
 
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "API работает"}
+
 @app.post("/search")
 async def search(request: SearchRequest):
     city = request.city.lower()
-    data = APARTMENTS.get(city, [])
-    return {"success": True, "count": len(data), "apartments": data}
+    apartments = APARTMENTS.get(city, [])
+    return {
+        "success": True,
+        "count": len(apartments),
+        "apartments": apartments
+    }
