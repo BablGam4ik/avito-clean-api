@@ -23,7 +23,7 @@ class SearchRequest(BaseModel):
 # ВСТАВЬТЕ СЮДА ДАННЫЕ ИЗ avito_apartments.json
 # ============================================
 REAL_APARTMENTS = [
-    [
+
         {
             "title": "9-к. квартира, 386 м², 15/15 эт.",
             "price": 390000000,
@@ -375,7 +375,7 @@ REAL_APARTMENTS = [
             "link": "https://www.avito.ru/moskva/kvartiry/kvartira-studiya_25_m_1433_et._7253220149?context=H4sIAAAAAAAA_wE_AMD_YToyOntzOjEzOiJsb2NhbFByaW9yaXR5IjtiOjA7czoxOiJ4IjtzOjE2OiJRZ2R2eTRHVWl0QWptQzN3Ijt9IHL33z8AAAA"
         }
     ]
-]
+
 
 
 # Функция определения города по адресу
