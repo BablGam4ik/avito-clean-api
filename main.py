@@ -4,17 +4,19 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+# РАЗРЕШАЕМ ЗАПРОСЫ С ЛЮБЫХ САЙТОВ (включая Beget)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"],  # * означает "все сайты"
+    allow_credentials=True,
+    allow_methods=["*"],  # разрешаем все методы (GET, POST и т.д.)
+    allow_headers=["*"],  # разрешаем все заголовки
 )
 
 class SearchRequest(BaseModel):
     city: str
 
-# РАЗНЫЕ ДАННЫЕ ДЛЯ РАЗНЫХ ГОРОДОВ
+# ДАННЫЕ ДЛЯ ГОРОДОВ
 APARTMENTS = {
     "москва": [
         {"id": 1, "title": "Москва - Патриаршие", "price": 8900, "address": "Москва, Патриаршая, 12"},
