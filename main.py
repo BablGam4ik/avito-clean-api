@@ -16,15 +16,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ===== НАСТРОЙКИ ДЛЯ ОТПРАВКИ ПИСЕМ =====
-SMTP_SERVER = "smtp.yandex.ru"
-SMTP_PORT = 465
-SMTP_EMAIL = "korpachev-2000@mail.ru"
-SMTP_PASSWORD = "lfca okpl gzkq bayh"
+# ===== НАСТРОЙКИ ДЛЯ ОТПРАВКИ ПИСЕМ (GMAIL) =====
+# ВНИМАНИЕ: Вместо "ВАШ_ПАРОЛЬ_ПРИЛОЖЕНИЯ" вставьте 16-значный пароль из Google
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
+SMTP_EMAIL = "korpacevegor@gmail.com"
+SMTP_PASSWORD = "lfca okpl gzkq bayh"  # ← ЗАМЕНИТЕ ЭТО!
 ADMIN_EMAIL = "korpacevegor@gmail.com"
 
 
-# ========================================
+# ===============================================
 
 class SearchRequest(BaseModel):
     city: str
@@ -42,7 +43,7 @@ class BookingRequest(BaseModel):
 
 
 # ============================================
-# ВАШИ 50 КВАРТИР (оставьте как есть)
+# ВАШИ 50 КВАРТИР (сокращено, добавьте свои)
 # ============================================
 REAL_APARTMENTS = [
     {
@@ -459,7 +460,7 @@ print(f"🏙️ Города: {list(APARTMENTS_BY_CITY.keys())}")
 
 
 def send_booking_email(booking: BookingRequest):
-    """Функция для отправки письма"""
+    """Функция для отправки письма через Gmail"""
     subject = "Новая заявка на бронирование квартиры"
 
     message = f"""
@@ -493,11 +494,19 @@ Email: {booking.guest_email or 'Не указан'}
     msg['Subject'] = subject
     msg.attach(MIMEText(message, 'plain', 'utf-8'))
 
+    # Если клиент указал email, отправим копию ему
+    if booking.guest_email:
+        msg['Cc'] = booking.guest_email
+
     try:
-        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
+        # Для порта 587 используем starttls()
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()  # Включаем шифрование
             server.login(SMTP_EMAIL, SMTP_PASSWORD)
             server.send_message(msg)
         print(f"✅ Письмо отправлено на {ADMIN_EMAIL}")
+        if booking.guest_email:
+            print(f"📧 Копия отправлена клиенту на {booking.guest_email}")
         return True
     except Exception as e:
         print(f"❌ Ошибка отправки письма: {e}")
