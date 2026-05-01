@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 app = FastAPI()
 
@@ -13,10 +16,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ===== НАСТРОЙКИ ДЛЯ ОТПРАВКИ ПИСЕМ (ЗАМЕНИТЕ НА СВОИ!) =====
+SMTP_SERVER = "smtp.yandex.ru"  # Для Яндекса. Для Gmail: "smtp.gmail.com"
+SMTP_PORT = 465  # Для SSL. Для TLS используйте 587
+SMTP_EMAIL = "korpachev-2000@mail.ru"  # <--- ВАША ПОЧТА (ОТПРАВИТЕЛЬ)
+SMTP_PASSWORD = "05022000"  # <--- ПАРОЛЬ ИЛИ ТОКЕН ДОСТУПА
+ADMIN_EMAIL = "korpacevegor@gmail.com"  # <--- КУДА ПРИХОДЯТ ЗАЯВКИ
+# ==========================================================
 
 class SearchRequest(BaseModel):
     city: str
     max_price: Optional[int] = None
+
+class BookingRequest(BaseModel):
+    apartment: dict
+    guest_name: str
+    guest_phone: str
+    guest_email: str
+    comment: str
+    checkin: str
+    checkout: str
 
 
 # ============================================
