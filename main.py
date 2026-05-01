@@ -18,11 +18,11 @@ app.add_middleware(
 
 # ===== НАСТРОЙКИ ДЛЯ ОТПРАВКИ ПИСЕМ (GMAIL) =====
 # ВНИМАНИЕ: Вместо "ВАШ_ПАРОЛЬ_ПРИЛОЖЕНИЯ" вставьте 16-значный пароль из Google
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-SMTP_EMAIL = "korpacevegor@gmail.com"
-SMTP_PASSWORD = "lfca okpl gzkq bayh"  # ← ЗАМЕНИТЕ ЭТО!
-ADMIN_EMAIL = "korpacevegor@gmail.com"
+SMTP_SERVER = "smtp.beget.com"
+SMTP_PORT = 465
+SMTP_EMAIL = "v9504205"  # Логин от панели Beget + @ваш_домен
+SMTP_PASSWORD = "jYZ5VOv9XV1j"       # Пароль от панели управления Beget
+ADMIN_EMAIL = "korpacevegor@gmail.com"         # Куда приходя
 
 
 # ===============================================
