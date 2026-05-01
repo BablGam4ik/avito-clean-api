@@ -23,7 +23,7 @@ class SearchRequest(BaseModel):
 # ВАШИ 50 КВАРТИР (вставьте сюда свои данные)
 # ============================================
 REAL_APARTMENTS = [
-    [
+
         {
             "title": "Квартира",
             "price": 600000,
@@ -425,7 +425,7 @@ REAL_APARTMENTS = [
             "img": ""
         }
     ]
-]
+
 
 
 def get_city_from_address(address: str) -> str:
