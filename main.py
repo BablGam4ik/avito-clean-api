@@ -20,7 +20,7 @@ app.add_middleware(
 SMTP_SERVER = "smtp.yandex.ru"  # Для Яндекса. Для Gmail: "smtp.gmail.com"
 SMTP_PORT = 465  # Для SSL. Для TLS используйте 587
 SMTP_EMAIL = "korpachev-2000@mail.ru"  # <--- ВАША ПОЧТА (ОТПРАВИТЕЛЬ)
-SMTP_PASSWORD = "05022000"  # <--- ПАРОЛЬ ИЛИ ТОКЕН ДОСТУПА
+SMTP_PASSWORD = "lfca okpl gzkq bayh"  # <--- ПАРОЛЬ ИЛИ ТОКЕН ДОСТУПА
 ADMIN_EMAIL = "korpacevegor@gmail.com"  # <--- КУДА ПРИХОДЯТ ЗАЯВКИ
 # ==========================================================
 
