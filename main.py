@@ -524,9 +524,23 @@ async def root():
 
 @app.post("/search")
 async def search(request: SearchRequest):
+    # 1. Определяем город
     city = request.city.lower()
-    apartments = APARTMENTS_BY_CITY.get(city, [])
 
+    # 2. Получаем все квартиры
+    apartments = REAL_APARTMENTS
+
+    # 3. Фильтр по городу (поиск в адресе или названии)
+    if city != "москва":
+        filtered = []
+        for apt in apartments:
+            address = apt.get("address", "").lower()
+            title = apt.get("title", "").lower()
+            if city in address or city in title:
+                filtered.append(apt)
+        apartments = filtered
+
+    # 4. Фильтр по цене (если указан)
     if request.max_price is not None and request.max_price > 0:
         filtered = []
         for apt in apartments:
@@ -535,11 +549,8 @@ async def search(request: SearchRequest):
                 filtered.append(apt)
         apartments = filtered
 
-    return {
-        "success": True,
-        "count": len(apartments),
-        "apartments": apartments
-    }
+    # 5. Возвращаем результат
+    return {"success": True, "count": len(apartments), "apartments": apartments}
 
 
 @app.post("/send-booking")
