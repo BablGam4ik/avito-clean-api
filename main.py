@@ -16,15 +16,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ===== НАСТРОЙКИ ДЛЯ ОТПРАВКИ ПИСЕМ =====
+# ===== НАСТРОЙКИ ДЛЯ ОТПРАВКИ ПИСЕМ (GMAIL) =====
+# ЭТИ ДАННЫЕ УЖЕ ПРАВИЛЬНЫЕ, НИЧЕГО НЕ ТРОГАЙТЕ
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 SMTP_EMAIL = "korpacevegor@gmail.com"
-SMTP_PASSWORD = "ВАШ_ПАРОЛЬ_ПРИЛОЖЕНИЯ"  # ← ЗАМЕНИТЕ НА РЕАЛЬНЫЙ ПАРОЛЬ!
+SMTP_PASSWORD = "srnyyvqajocnsvdp"  # Ваш 16-значный пароль приложения (без пробелов!)
 ADMIN_EMAIL = "korpacevegor@gmail.com"
 
 
-# =========================================
+# ================================================
 
 class SearchRequest(BaseModel):
     city: str
@@ -459,6 +460,7 @@ print(f"🏙️ Города: {list(APARTMENTS_BY_CITY.keys())}")
 
 
 def send_booking_email(booking: BookingRequest):
+    """Отправка письма через Gmail SMTP"""
     subject = "Новая заявка на бронирование квартиры"
 
     message = f"""
@@ -492,12 +494,18 @@ Email: {booking.guest_email or 'Не указан'}
     msg['Subject'] = subject
     msg.attach(MIMEText(message, 'plain', 'utf-8'))
 
+    # Копия клиенту (если указан email)
+    if booking.guest_email:
+        msg['Cc'] = booking.guest_email
+
     try:
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
+            server.starttls()  # Включаем шифрование
             server.login(SMTP_EMAIL, SMTP_PASSWORD)
             server.send_message(msg)
         print(f"✅ Письмо отправлено на {ADMIN_EMAIL}")
+        if booking.guest_email:
+            print(f"📧 Копия отправлена клиенту на {booking.guest_email}")
         return True
     except Exception as e:
         print(f"❌ Ошибка отправки письма: {e}")
